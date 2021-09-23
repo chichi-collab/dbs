@@ -11,6 +11,7 @@ import 'package:dbs/customisedwidgets/texts/black.dart';
 import 'package:dbs/data/products.dart';
 import 'package:dbs/redux/actions/useractions.dart';
 import 'package:dbs/redux/appstate.dart';
+import 'package:dbs/screens/home/order.dart';
 import 'package:dbs/screens/home/search.dart';
 import 'package:dbs/screens/login/login.dart';
 import 'package:dbs/theme/colors.dart';
@@ -439,21 +440,47 @@ class _HomeState extends State<Home> {
                                                     .pharmacy_info!.title
                                                     .toString()
                                                 : ""),
-                                    Text("ETA: " +
-                                        (durationValue == null
-                                            ? ""
-                                            : durationValue!.text))
+                                    BlackText(
+                                        text: "ETA: " +
+                                            (durationValue == null
+                                                ? ""
+                                                : durationValue!.text))
                                   ],
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Location: " +
                                         (selectedProduct == null
                                             ? ""
                                             : selectedProduct!.pharmacy_info!
                                                 .location!['name']
-                                                .toString()))
+                                                .toString())),
+                                    BlackText(
+                                        size: 14,
+                                        text: 'Price: GHC ' +
+                                            selectedProduct!.price.toString())
                                   ],
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 15),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: SecondaryButton(
+                                    onPressed: () async {
+                                      Product? search = await Navigator.of(
+                                              context)
+                                          .push(MaterialPageRoute(
+                                              builder: (BuildContext context) {
+                                                return Order(
+                                                    product: selectedProduct!);
+                                              },
+                                              fullscreenDialog: true));
+                                    },
+                                    text: 'Order',
+                                    backgroundColor: DefaultColors.green,
+                                    color: Colors.white,
+                                  ),
                                 )
                               ],
                             ),

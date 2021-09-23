@@ -140,11 +140,20 @@ class _SearchState extends State<Search> {
                                               context, searchResults[index]);
                                         },
                                         title: BlackText(
+                                          margin: EdgeInsets.zero,
                                           text: product.title!,
                                         ),
-                                        subtitle: Text(product
-                                            .pharmacy_info!.title
-                                            .toString()),
+                                        isThreeLine: true,
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Price: GHC " +
+                                                product.price.toString()),
+                                            Text(product.pharmacy_info!.title
+                                                .toString()),
+                                          ],
+                                        ),
                                         trailing: Text(
                                           'about ' +
                                               (distanceInMeters / 1000)
