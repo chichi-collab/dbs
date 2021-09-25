@@ -314,17 +314,8 @@ class _HomeState extends State<Home> {
                                                     ),
                                                   ),
                                                   width: double.infinity,
-                                                  // height: double.infinity,
                                                 ),
                                               ),
-                                              // Triangle.isosceles(
-                                              //   edge: Edge.BOTTOM,
-                                              //   child: Container(
-                                              //     color: Colors.blue,
-                                              //     width: 20.0,
-                                              //     height: 10.0,
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                           LatLng(
@@ -343,7 +334,7 @@ class _HomeState extends State<Home> {
                                         selectedProduct!.pharmacy_info!
                                             .location!['coords']['lat'],
                                         selectedProduct!.pharmacy_info!
-                                            .location!['coords']['lng']))
+                                            .location!['coords']['lng'])),
                               };
                             } else {
                               setState(() {
@@ -372,24 +363,6 @@ class _HomeState extends State<Home> {
                                         ['lng']));
                           }
 
-                          // _controller?.moveCamera(CameraUpdate.newLatLngBounds(
-                          //     selectedProduct!.pharmacy_info!.location!['coords']['lat'] <=
-                          //             state.userLocation!.latitude
-                          //         ? LatLngBounds(
-                          //             southwest: LatLng(
-                          //                 selectedProduct!
-                          //                         .pharmacy_info!
-                          //                         .location!['coords']
-                          //                     ['lat'],
-                          //                 selectedProduct!
-                          //                         .pharmacy_info!
-                          //                         .location!['coords']
-                          //                     ['lng']),
-                          //             northeast: LatLng(
-                          //                 state.userLocation!.latitude,
-                          //                 state.userLocation!.longitude))
-                          //         : LatLngBounds(northeast: LatLng(state.userLocation!.latitude, state.userLocation!.longitude), southwest: LatLng(selectedProduct!.pharmacy_info!.location!['coords']['lat'], selectedProduct!.pharmacy_info!.location!['coords']['lng'])),
-                          //     10));
                           log(search.toString(), name: 'search result');
                         },
                         child: Row(
@@ -460,7 +433,10 @@ class _HomeState extends State<Home> {
                                     BlackText(
                                         size: 14,
                                         text: 'Price: GHC ' +
-                                            selectedProduct!.price.toString())
+                                            (selectedProduct == null
+                                                ? ""
+                                                : selectedProduct!.price
+                                                    .toString()))
                                   ],
                                 ),
                                 Container(
@@ -480,6 +456,21 @@ class _HomeState extends State<Home> {
                                     text: 'Order',
                                     backgroundColor: DefaultColors.green,
                                     color: Colors.white,
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: SecondaryButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        selectedProduct = null;
+                                      });
+                                    },
+                                    text: 'Close',
+                                    color: Colors.red,
+                                    backgroundColor:
+                                        Color.fromRGBO(255, 0, 0, 0.2),
                                   ),
                                 )
                               ],

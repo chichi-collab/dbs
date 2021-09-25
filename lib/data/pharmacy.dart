@@ -29,6 +29,5 @@ class Pharmacy {
         'is_active': is_active,
         'id': id,
         'location': location,
-        'created_at': created_at,
       };
 }

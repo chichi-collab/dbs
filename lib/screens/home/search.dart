@@ -51,35 +51,65 @@ class _SearchState extends State<Search> {
                   onPressed: () {
                     Navigator.pop(context);
                   }),
-              title: CustomInput(
-                autofocus: true,
-                onChanged: (String value) async {
-                  log(value, name: 'Search value');
-                  if (value.length > 0) {
-                    setState(() {
-                      loading = true;
-                    });
-                    List<Product> SearchListInit = [];
-                    List<Product> results = state.products;
+              title: Container(
+                child: TextField(
+                  autofocus: true,
 
-                    if (results.length > 0) {
-                      results.forEach((element) {
-                        if (element.title!
-                            .toLowerCase()
-                            .contains(value.toLowerCase().trim())) {
-                          SearchListInit.add(element);
-                        }
+                  onChanged: (String value) async {
+                    log(value, name: 'Search value');
+                    if (value.length > 0) {
+                      setState(() {
+                        loading = true;
+                      });
+                      List<Product> SearchListInit = [];
+                      List<Product> results = state.products;
+
+                      if (results.length > 0) {
+                        results.forEach((element) {
+                          if (element.title!
+                              .toLowerCase()
+                              .contains(value.toLowerCase().trim())) {
+                            SearchListInit.add(element);
+                          }
+                        });
+                      }
+                      setState(() {
+                        loading = false;
+                        searchResults = SearchListInit;
                       });
                     }
-                    setState(() {
-                      loading = false;
-                      searchResults = SearchListInit;
-                    });
-                  }
-                },
-                height: 50,
-                controller: searchTextEditingController,
-                hint: 'Search',
+                  },
+                  // height: 50,
+                  controller: searchTextEditingController,
+
+                  style: TextStyle(
+                      color: DefaultColors.ash, fontWeight: FontWeight.bold),
+                  cursorColor: DefaultColors.green,
+                  decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: "Search",
+                      hintStyle: TextStyle(
+                          color: DefaultColors.ash,
+                          fontWeight: FontWeight.normal),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(5)),
+                      // border: OutlineInputBorder(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     borderSide:
+                      //         BorderSide(color: DefaultColors.ash, width: 2)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              style: BorderStyle.solid,
+                              color: DefaultColors.ash,
+                              width: 2)),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: DefaultColors.ash, width: 2))),
+                ),
               ),
             ),
             body: SafeArea(

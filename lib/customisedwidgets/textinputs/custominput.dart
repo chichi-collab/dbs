@@ -34,61 +34,51 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: height,
-          margin: margin,
-          child: TextField(
-            autofocus: autofocus,
-            onChanged: this.onChanged,
-            controller: this.controller,
-            obscureText: this.obscureText,
-            inputFormatters: this.inputFormatters,
-            keyboardType: this.keyboardType,
-            style: TextStyle(
-                color: DefaultColors.ash, fontWeight: FontWeight.bold),
-            cursorColor: DefaultColors.green,
-            decoration: InputDecoration(
-                enabled: enabled,
-                suffixIcon: suffixIcon,
-                errorText: error != null
-                    ? error!.visible
-                        ? error!.message
-                        : null
-                    : null,
-                fillColor: filledColor,
-                filled: true,
-                hintText: hint,
-                hintStyle: TextStyle(
-                    color: DefaultColors.ash, fontWeight: FontWeight.normal),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        color: DefaultColors.green,
-                        width: 2)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: DefaultColors.ash, width: 2)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        color: DefaultColors.ash,
-                        width: 2)),
-                disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                        BorderSide(color: DefaultColors.ash, width: 2))),
-          ),
-        ),
-        SizedBox(
-          height: 5,
-        )
-      ],
+    return Container(
+      height: height,
+      margin: margin,
+      alignment: Alignment.center,
+      child: TextField(
+        autofocus: autofocus,
+        onChanged: this.onChanged,
+        controller: this.controller,
+        obscureText: this.obscureText,
+        inputFormatters: this.inputFormatters,
+        keyboardType: this.keyboardType,
+        style: TextStyle(color: DefaultColors.ash, fontWeight: FontWeight.bold),
+        cursorColor: DefaultColors.green,
+        decoration: InputDecoration(
+            enabled: enabled,
+            suffixIcon: suffixIcon,
+            errorText: error != null
+                ? error!.visible
+                    ? error!.message
+                    : null
+                : null,
+            fillColor: filledColor,
+            filled: true,
+            hintText: hint,
+            hintStyle: TextStyle(
+                color: DefaultColors.ash, fontWeight: FontWeight.normal),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                    style: BorderStyle.solid,
+                    color: DefaultColors.green,
+                    width: 2)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: DefaultColors.ash, width: 2)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                    style: BorderStyle.solid,
+                    color: DefaultColors.ash,
+                    width: 2)),
+            disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: DefaultColors.ash, width: 2))),
+      ),
     );
   }
 }
