@@ -10,6 +10,7 @@ import 'package:dbs/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lottie/lottie.dart';
 import 'package:redux/redux.dart';
 
 import '../../main.dart';
@@ -99,16 +100,9 @@ class _SearchState extends State<Search> {
                       //     borderRadius: BorderRadius.circular(10),
                       //     borderSide:
                       //         BorderSide(color: DefaultColors.ash, width: 2)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              style: BorderStyle.solid,
-                              color: DefaultColors.ash,
-                              width: 2)),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              BorderSide(color: DefaultColors.ash, width: 2))),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(5))),
                 ),
               ),
             ),
@@ -140,10 +134,27 @@ class _SearchState extends State<Search> {
                                 strokeWidth: 2,
                               ),
                             )
-                          : searchResults.length == 0
-                              ? Text(
-                                  'No Product with the title: ${searchTextEditingController.text.trim()} found',
-                                  style: TextStyle(color: Colors.red),
+                          : searchResults.length == 0 &&
+                                  searchTextEditingController.text.length > 0
+                              ? Container(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        LottieBuilder.asset(
+                                          'lib/lottiefiles/notfound.json',
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                        ),
+                                        Text(
+                                          'No Product with the title: ${searchTextEditingController.text.trim()} found',
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 )
                               : ListView.builder(
                                   itemCount: searchResults.length,
