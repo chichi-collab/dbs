@@ -108,7 +108,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
       child: MaterialApp(
-        title: 'Edirm',
+        title: 'DDS',
         home: FutureBuilder(
           // Initialize FlutterFire:
           future: _initialization,

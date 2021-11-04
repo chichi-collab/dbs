@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phil.dbs">
    <application
-        android:label="dbs"
+        android:label="dds"
         android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyD8qYHhnRdpYdD9jFIQemp56pz5LzEh7h0"/>
