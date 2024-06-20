@@ -25,7 +25,7 @@ GetIt getIt = GetIt.instance;
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  'This channel is used for important notifications.', // description
+ description: 'This channel is used for important notifications.', // description
   importance: Importance.max,
 );
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -66,7 +66,7 @@ void main() async {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
-      'This channel is used for important notifications.', // description
+      description: 'This channel is used for important notifications.', // description
       importance: Importance.max,
     );
     await flutterLocalNotificationsPlugin
@@ -79,14 +79,14 @@ void main() async {
         InitializationSettings(
       android: initializationSettingsAndroid,
     );
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-      }
-      selectedNotificationPayload = payload;
-      selectNotificationSubject.add(payload!);
-    });
+    // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    //     onDidReceiveNotificationResponse: (String? payload) async {
+    //   if (payload != null) {
+    //     debugPrint('notification payload: $payload');
+    //   }
+    //   selectedNotificationPayload = payload;
+    //   selectNotificationSubject.add(payload!);
+    // });
   }
   runApp(MyApp(
     store: store,

@@ -117,9 +117,9 @@ class _HomeState extends State<Home> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     Position userposition = await Geolocator.getCurrentPosition();
-    StreamSubscription streamSubscription =
-        Geolocator.getPositionStream(distanceFilter: 10)
-            .listen((Position position) {
+    StreamSubscription streamSubscription = Geolocator.getPositionStream(
+            locationSettings: LocationSettings(distanceFilter: 10))
+        .listen((Position position) {
       if (position != null) {
         //   UserModel? user = getIt.get<Store<AppState>>().state.user;
         //   db
