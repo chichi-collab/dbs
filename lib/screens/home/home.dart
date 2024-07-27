@@ -24,7 +24,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:location/location.dart';
 import 'package:redux/redux.dart';
-import 'package:google_maps_webservice/distance.dart' as distanceMatrix;
+// import 'package:google_maps_webservice/distance.dart' as distanceMatrix;
 import '../../main.dart';
 import 'package:http/http.dart' as http;
 
@@ -294,7 +294,8 @@ class _HomeState extends State<Home> {
                                                           color: DefaultColors
                                                               .green,
                                                           child: Text(
-                                                            distanceValue!.text,
+                                                            "",
+                                                            // distanceValue!.text,
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white),
@@ -413,11 +414,12 @@ class _HomeState extends State<Home> {
                                                     .pharmacy_info!.title
                                                     .toString()
                                                 : ""),
-                                    BlackText(
-                                        text: "ETA: " +
-                                            (durationValue == null
-                                                ? ""
-                                                : durationValue!.text))
+                                    BlackText(text: "ETA: "
+                                        // +
+                                        //     (durationValue == null
+                                        //         ? ""
+                                        //         : durationValue!.text)
+                                        )
                                   ],
                                 ),
                                 Row(
@@ -580,32 +582,32 @@ class _HomeState extends State<Home> {
   PolylinePoints polylinePoints = PolylinePoints();
   LatLngBounds? bounds;
   String googleAPiKey = "AIzaSyCSfLqHtXZmHww98tHHDPkd70yB-3FVTT4";
-  distanceMatrix.Value? distanceValue;
-  distanceMatrix.Value? durationValue;
+  // distanceMatrix.Value? distanceValue;
+  // distanceMatrix.Value? durationValue;
 
-  final distance = new distanceMatrix.GoogleDistanceMatrix(
-    apiKey: "AIzaSyCSfLqHtXZmHww98tHHDPkd70yB-3FVTT4",
-  );
+  // final distance = new distanceMatrix.GoogleDistanceMatrix(
+  //   apiKey: "AIzaSyCSfLqHtXZmHww98tHHDPkd70yB-3FVTT4",
+  // );
 
   _getDistance({
     required LatLng origin,
     required LatLng dest,
   }) async {
-    distanceMatrix.DistanceResponse response = await distance
-        .distanceWithLocation([
-      distanceMatrix.Location(lat: origin.latitude, lng: origin.longitude)
-    ], [
-      distanceMatrix.Location(lat: dest.latitude, lng: dest.longitude)
-    ]);
-    log(response.rows[0].elements[0].distance.text);
+    // distanceMatrix.DistanceResponse response = await distance
+    //     .distanceWithLocation([
+    //   distanceMatrix.Location(lat: origin.latitude, lng: origin.longitude)
+    // ], [
+    //   distanceMatrix.Location(lat: dest.latitude, lng: dest.longitude)
+    // ]);
+    // log(response.rows[0].elements[0].distance.text);
 
-    distanceMatrix.Value distanceVal = response.rows[0].elements[0].distance;
-    distanceMatrix.Value durationVal = response.rows[0].elements[0].duration;
+    // distanceMatrix.Value distanceVal = response.rows[0].elements[0].distance;
+    // distanceMatrix.Value durationVal = response.rows[0].elements[0].duration;
 
-    setState(() {
-      distanceValue = distanceVal;
-      durationValue = durationVal;
-    });
+    // setState(() {
+    //   distanceValue = distanceVal;
+    //   durationValue = durationVal;
+    // });
   }
 
   _getPolyline({required LatLng origin, required LatLng dest}) async {

@@ -1,8 +1,7 @@
 name: dbs
-description: A mobile application that helps individuals to get access to pharmacies easily
-
+description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -12,48 +11,62 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.4.3 <4.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
   permission_handler: ^11.0.1
-  google_maps_flutter: ^2.0.6
-  flutter_polyline_points: ^1.0.0
-  geolocator: ^11.1.0
-  location: ^5.0.3
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.14.0
-  firebase_messaging: ^14.7.10
+  google_maps_flutter: ^2.7.0
+  flutter_polyline_points: ^2.1.0
+  geolocator: ^12.0.0
+  location: ^7.0.0
+  firebase_core: ^3.2.0
+  firebase_auth: ^5.1.2
+  cloud_firestore: ^5.1.0
+  firebase_messaging: ^15.0.3
   get_it: ^7.1.3
   flutter_redux: ^0.10.0
   redux: ^5.0.0
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.2.1+2
   flutter_local_notifications_platform_interface: ^7.1.0
   path_provider: ^2.0.0
   rxdart: ^0.28.0
-  firebase_analytics: ^10.8.0
+  firebase_analytics: ^11.2.0
   timezone: ^0.9.3
-  lottie: ^2.7.0
+  lottie: ^3.1.2
   custom_info_window: ^1.0.1
   google_sign_in: ^6.1.6
-  google_maps_webservice: ^0.0.20-nullsafety.5
-  http: ^0.13.0
+  http: ^1.2.2
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^4.0.0
 flutter_icons:
   android: "launcher_icon"
   ios: true
@@ -61,7 +74,7 @@ flutter_icons:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -78,10 +91,11 @@ flutter:
     - lib/lottiefiles/done.json
     - lib/lottiefiles/notfound.json
     - lib/assets/lock_one.png
+  #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
