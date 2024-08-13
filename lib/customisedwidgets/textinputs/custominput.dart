@@ -1,6 +1,7 @@
-import 'package:dbs/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../theme/colors.dart';
 
 class CustomInput extends StatelessWidget {
   final TextEditingController controller;
@@ -17,8 +18,9 @@ class CustomInput extends StatelessWidget {
   final Function(String)? onChanged;
   final bool autofocus;
 
-  CustomInput(
-      {required this.controller,
+  const CustomInput(
+      {super.key,
+      required this.controller,
       required this.hint,
       this.height = 65,
       this.autofocus = false,
@@ -40,12 +42,13 @@ class CustomInput extends StatelessWidget {
       alignment: Alignment.center,
       child: TextField(
         autofocus: autofocus,
-        onChanged: this.onChanged,
-        controller: this.controller,
-        obscureText: this.obscureText,
-        inputFormatters: this.inputFormatters,
-        keyboardType: this.keyboardType,
-        style: TextStyle(color: DefaultColors.ash, fontWeight: FontWeight.bold),
+        onChanged: onChanged,
+        controller: controller,
+        obscureText: obscureText,
+        inputFormatters: inputFormatters,
+        keyboardType: keyboardType,
+        style: const TextStyle(
+            color: DefaultColors.ash, fontWeight: FontWeight.bold),
         cursorColor: DefaultColors.green,
         decoration: InputDecoration(
             enabled: enabled,
@@ -58,26 +61,28 @@ class CustomInput extends StatelessWidget {
             fillColor: filledColor,
             filled: true,
             hintText: hint,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 color: DefaultColors.ash, fontWeight: FontWeight.normal),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                     style: BorderStyle.solid,
                     color: DefaultColors.green,
                     width: 2)),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: DefaultColors.ash, width: 2)),
+                borderSide:
+                    const BorderSide(color: DefaultColors.ash, width: 2)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                     style: BorderStyle.solid,
                     color: DefaultColors.ash,
                     width: 2)),
             disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: DefaultColors.ash, width: 2))),
+                borderSide:
+                    const BorderSide(color: DefaultColors.ash, width: 2))),
       ),
     );
   }

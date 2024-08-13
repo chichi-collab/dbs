@@ -1,31 +1,28 @@
-import 'package:dbs/data/pharmacy.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/redux/middlewares/user.dart';
-import 'package:dbs/redux/reducer.dart';
-import 'package:dbs/screens/home/order.dart';
-import 'package:dbs/screens/splash/splash.dart';
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redux/redux.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'data/notification.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'package:rxdart/subjects.dart';
-import 'dart:io';
+import 'data/notification.dart';
+import 'redux/appstate.dart';
+import 'redux/middlewares/user.dart';
+import 'redux/reducer.dart';
+import 'screens/splash/splash.dart';
 
 GetIt getIt = GetIt.instance;
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
- description: 'This channel is used for important notifications.', // description
+  description:
+      'This channel is used for important notifications.', // description
   importance: Importance.max,
 );
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -45,12 +42,12 @@ const MethodChannel platform = MethodChannel('high_importance_channel');
 String? selectedNotificationPayload;
 
 void main() async {
-  final Store<AppState> store = new Store(
+  final Store<AppState> store = Store(
     appStateReducer,
     middleware: [
       fetchUser,
     ],
-    initialState: new AppState(),
+    initialState: AppState(),
   );
   getIt.registerSingleton<Store<AppState>>(store, signalsReady: true);
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,7 +63,8 @@ void main() async {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
-      description: 'This channel is used for important notifications.', // description
+      description:
+          'This channel is used for important notifications.', // description
       importance: Importance.max,
     );
     await flutterLocalNotificationsPlugin
@@ -75,7 +73,7 @@ void main() async {
         ?.createNotificationChannel(channel);
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/launcher_icon');
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
     );
@@ -100,13 +98,14 @@ class MyApp extends StatelessWidget {
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-  MyApp({required this.store});
+  MyApp({super.key, required this.store});
 
 // TODO :
 
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
+      store: store,
       child: MaterialApp(
         title: 'DDS',
         home: FutureBuilder(
@@ -115,20 +114,19 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             // Check for errors
             if (snapshot.hasError) {
-              return Text('An Error occured');
+              return const Text('An Error occurred');
             }
 
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
-              return Splash();
+              return const Splash();
             }
 
             // Otherwise, show something whilst waiting for initialization to complete
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           },
         ),
       ),
-      store: store,
     );
   }
 }

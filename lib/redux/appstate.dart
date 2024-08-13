@@ -1,7 +1,7 @@
-import 'package:dbs/data/products.dart';
-import 'package:dbs/data/user.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../data/products.dart';
+import '../data/user.dart';
 
 class AppState {
   final UserModel? user;

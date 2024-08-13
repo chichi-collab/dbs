@@ -1,5 +1,6 @@
-import 'package:dbs/theme/colors.dart';
 import 'package:flutter/material.dart';
+
+import '../../theme/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final void Function()? onPressed;
@@ -7,8 +8,9 @@ class PrimaryButton extends StatelessWidget {
   final double elevation;
   final bool indicator;
 
-  PrimaryButton(
-      {this.onPressed,
+  const PrimaryButton(
+      {super.key,
+      this.onPressed,
       this.buttonText = '',
       this.elevation = 10,
       this.indicator = false});
@@ -17,19 +19,19 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-          padding: MaterialStateProperty.resolveWith((states) {
-            return EdgeInsets.symmetric(vertical: 10, horizontal: 20);
+          padding: WidgetStateProperty.resolveWith((states) {
+            return const EdgeInsets.symmetric(vertical: 10, horizontal: 20);
           }),
-          elevation: MaterialStateProperty.resolveWith(
-              (states) => this.onPressed == null ? 0 : this.elevation),
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
+          elevation: WidgetStateProperty.resolveWith(
+              (states) => onPressed == null ? 0 : elevation),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
             return DefaultColors.green;
           })),
-      onPressed: this.onPressed,
+      onPressed: onPressed,
       child: indicator
-          ? Container(
+          ? const SizedBox(
               width: 30,
               height: 30,
               child: CircularProgressIndicator(
@@ -37,8 +39,8 @@ class PrimaryButton extends StatelessWidget {
                 strokeWidth: 2,
               ),
             )
-          : Text(this.buttonText,
-              style: TextStyle(
+          : Text(buttonText,
+              style: const TextStyle(
                   color: DefaultColors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold)),

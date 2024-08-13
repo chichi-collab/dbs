@@ -1,43 +1,43 @@
-import 'package:dbs/data/pharmacy.dart';
+import 'pharmacy.dart';
 
 class Product {
   String? title;
   int? quantity;
   double? price;
-  bool is_active;
-  Pharmacy? pharmacy_info;
+  bool isActive;
+  Pharmacy? pharmacyInfo;
   String? pharmacy;
-  int? created_at;
+  int? createdAt;
   String? id;
 
   Product(
       {this.quantity,
-      this.is_active = false,
+      this.isActive = false,
       this.title,
       this.pharmacy,
-      this.pharmacy_info,
+      this.pharmacyInfo,
       this.id,
-      this.created_at,
+      this.createdAt,
       this.price});
 
   Product.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         quantity = json['quantity'],
-        is_active = json['is_active'],
+        isActive = json['is_active'],
         pharmacy = json['pharmacy'],
         price = json['price'],
         id = json['id'],
-        pharmacy_info =
+        pharmacyInfo =
             Pharmacy?.fromJson(json['pharmacy_info'] as Map<String, dynamic>),
-        created_at = json['created_at'];
+        createdAt = json['created_at'];
 
   Map<String, dynamic> toJson() => {
         'title': title,
         'quantity': quantity,
-        'is_active': is_active,
+        'is_active': isActive,
         'pharmacy': pharmacy,
         'id': id,
-        'pharmacy_info': pharmacy_info,
-        'created_at': created_at,
+        'pharmacy_info': pharmacyInfo,
+        'created_at': createdAt,
       };
 }

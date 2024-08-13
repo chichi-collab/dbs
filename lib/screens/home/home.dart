@@ -1,20 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:custom_info_window/custom_info_window.dart';
-import 'package:dbs/customisedwidgets/buttons/primarybutton.dart';
-import 'package:dbs/customisedwidgets/buttons/secondarybutton.dart';
-import 'package:dbs/customisedwidgets/textinputs/custominput.dart';
-import 'package:dbs/customisedwidgets/texts/black.dart';
-import 'package:dbs/data/products.dart';
-import 'package:dbs/redux/actions/useractions.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/screens/home/order.dart';
-import 'package:dbs/screens/home/search.dart';
-import 'package:dbs/screens/login/login.dart';
-import 'package:dbs/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -22,37 +10,49 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:redux/redux.dart';
+
+import '../../customisedwidgets/buttons/primarybutton.dart';
+import '../../customisedwidgets/buttons/secondarybutton.dart';
+import '../../customisedwidgets/textinputs/custominput.dart';
+import '../../customisedwidgets/texts/black.dart';
+import '../../data/products.dart';
 // import 'package:google_maps_webservice/distance.dart' as distanceMatrix;
 import '../../main.dart';
-import 'package:http/http.dart' as http;
+import '../../redux/actions/useractions.dart';
+import '../../redux/appstate.dart';
+import '../../theme/colors.dart';
+import '../login/login.dart';
+import 'order.dart';
+import 'search.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   GoogleMapController? _controller;
   TextEditingController searchController = TextEditingController();
   TextInputError? error;
-  CameraPosition _currentPostion = CameraPosition(
+  CameraPosition _currentPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 5.4746,
   );
-  CameraPosition? currentPostion;
+  CameraPosition? currentPosition;
 
   bool locationServices = false;
-  bool signoutIndicator = false;
-  CameraPosition _kLake = CameraPosition(
+  bool signOutIndicator = false;
+  final CameraPosition _kLake = const CameraPosition(
       bearing: 192.8334901395799,
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
       zoom: 20.151926040649414);
-  Location location = new Location();
+  Location location = Location();
   late StreamSubscription streamLocation;
 
   Future _determinePosition() async {
@@ -68,9 +68,9 @@ class _HomeState extends State<Home> {
       alert(
           yesString: 'Enable GPS services',
           yesPressed: () async {
-            bool _resp = await location.requestService();
+            bool resp = await location.requestService();
             setState(() {
-              locationServices = _resp;
+              locationServices = resp;
             });
           },
           message: 'Where are you?',
@@ -116,36 +116,34 @@ class _HomeState extends State<Home> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    Position userposition = await Geolocator.getCurrentPosition();
+    Position userPosition = await Geolocator.getCurrentPosition();
     StreamSubscription streamSubscription = Geolocator.getPositionStream(
-            locationSettings: LocationSettings(distanceFilter: 10))
+            locationSettings: const LocationSettings(distanceFilter: 10))
         .listen((Position position) {
-      if (position != null) {
-        //   UserModel? user = getIt.get<Store<AppState>>().state.user;
-        //   db
-        //       .collection('users')
-        //       .doc(user!.id)
-        //       .update({'location': position.toJson()}).then((value) {});
-        getIt
-            .get<Store<AppState>>()
-            .dispatch(GetUserLocationSuccess(userLocation: position));
-        //   _controller?.moveCamera(CameraUpdate.newLatLngZoom(
-        //       LatLng(position.latitude, position.longitude), 19));
-        // }
-      }
+      //   UserModel? user = getIt.get<Store<AppState>>().state.user;
+      //   db
+      //       .collection('users')
+      //       .doc(user!.id)
+      //       .update({'location': position.toJson()}).then((value) {});
+      getIt
+          .get<Store<AppState>>()
+          .dispatch(GetUserLocationSuccess(userLocation: position));
+      //   _controller?.moveCamera(CameraUpdate.newLatLngZoom(
+      //       LatLng(position.latitude, position.longitude), 19));
+      // }
     });
 
-    // log(userposition.longitude.toString(), name: 'latitude');
+    // log(userPosition.longitude.toString(), name: 'latitude');
     setState(() {
       streamLocation = streamSubscription;
-      _currentPostion = CameraPosition(
-          target: LatLng(userposition.latitude, userposition.longitude));
-      currentPostion = CameraPosition(
-          target: LatLng(userposition.latitude, userposition.longitude));
+      _currentPosition = CameraPosition(
+          target: LatLng(userPosition.latitude, userPosition.longitude));
+      currentPosition = CameraPosition(
+          target: LatLng(userPosition.latitude, userPosition.longitude));
     });
     if (_controller != null) {
       _controller?.moveCamera(CameraUpdate.newLatLngZoom(
-          LatLng(userposition.latitude, userposition.longitude), 17));
+          LatLng(userPosition.latitude, userPosition.longitude), 17));
     }
   }
 
@@ -161,14 +159,12 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     // TODO: implement dispose
-    if (streamLocation != null) {
-      streamLocation.cancel();
-    }
+    streamLocation.cancel();
     _customInfoWindowController.dispose();
     super.dispose();
   }
 
-  CustomInfoWindowController _customInfoWindowController =
+  final CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
   Set<Marker>? _markers;
 
@@ -199,22 +195,22 @@ class _HomeState extends State<Home> {
                   setState(() {
                     _controller = controller;
                   });
-                  if (currentPostion != null) {
-                    _controller?.moveCamera(
-                        CameraUpdate.newLatLngZoom(currentPostion!.target, 17));
+                  if (currentPosition != null) {
+                    _controller?.moveCamera(CameraUpdate.newLatLngZoom(
+                        currentPosition!.target, 17));
                   }
                 },
                 markers: _markers != null ? _markers! : {},
                 onCameraIdle: () {},
-                initialCameraPosition: _currentPostion,
+                initialCameraPosition: _currentPosition,
                 // onMapCreated: (GoogleMapController controller) {
                 //   // _controller.complete(controller);
                 //   setState(() {
                 //     _controller = controller;
                 //   });
-                //   if (currentPostion != null) {
+                //   if (currentPosition != null) {
                 //     _controller?.moveCamera(
-                //         CameraUpdate.newLatLngZoom(currentPostion!.target, 17));
+                //         CameraUpdate.newLatLngZoom(currentPosition!.target, 17));
                 //   }
                 // },
               ),
@@ -229,16 +225,16 @@ class _HomeState extends State<Home> {
                 child: Hero(
                     tag: 'search',
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                EdgeInsets.symmetric(
+                            padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(
                                     vertical: 15, horizontal: 15)),
                             backgroundColor:
-                                MaterialStateProperty.all(DefaultColors.white),
-                            shape: MaterialStateProperty.all(
+                                WidgetStateProperty.all(DefaultColors.white),
+                            shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
                         onPressed: () async {
@@ -248,7 +244,7 @@ class _HomeState extends State<Home> {
                           Product? search = await Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (BuildContext context) {
-                            return Search(tag: 'search');
+                            return const Search(tag: 'search');
                           }));
 
                           setState(() {
@@ -258,9 +254,9 @@ class _HomeState extends State<Home> {
                                   Geolocator.distanceBetween(
                                       state.userLocation!.latitude,
                                       state.userLocation!.longitude,
-                                      search.pharmacy_info!.location!['coords']
+                                      search.pharmacyInfo!.location!['coords']
                                           ['lat'],
-                                      search.pharmacy_info!.location!['coords']
+                                      search.pharmacyInfo!.location!['coords']
                                           ['lng']);
                               _markers = <Marker>{
                                 Marker(
@@ -281,6 +277,7 @@ class _HomeState extends State<Home> {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
+                                                  width: double.infinity,
                                                   child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -293,7 +290,7 @@ class _HomeState extends State<Home> {
                                                         Container(
                                                           color: DefaultColors
                                                               .green,
-                                                          child: Text(
+                                                          child: const Text(
                                                             "",
                                                             // distanceValue!.text,
                                                             style: TextStyle(
@@ -301,28 +298,27 @@ class _HomeState extends State<Home> {
                                                                     .white),
                                                           ),
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           width: 8.0,
                                                         ),
                                                         Text(
                                                             search.title
                                                                 .toString(),
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 color:
                                                                     DefaultColors
                                                                         .ash))
                                                       ],
                                                     ),
                                                   ),
-                                                  width: double.infinity,
                                                 ),
                                               ),
                                             ],
                                           ),
                                           LatLng(
-                                              search.pharmacy_info!
+                                              search.pharmacyInfo!
                                                   .location!['coords']['lat'],
-                                              search.pharmacy_info!
+                                              search.pharmacyInfo!
                                                   .location!['coords']['lng']));
                                     },
                                     // infoWindow: InfoWindow(
@@ -332,9 +328,9 @@ class _HomeState extends State<Home> {
                                     //         .toString()),
                                     // // icon: _destinationIcon!,
                                     position: LatLng(
-                                        selectedProduct!.pharmacy_info!
+                                        selectedProduct!.pharmacyInfo!
                                             .location!['coords']['lat'],
-                                        selectedProduct!.pharmacy_info!
+                                        selectedProduct!.pharmacyInfo!
                                             .location!['coords']['lng'])),
                               };
                             } else {
@@ -350,17 +346,17 @@ class _HomeState extends State<Home> {
                                 origin: LatLng(state.userLocation!.latitude,
                                     state.userLocation!.longitude),
                                 dest: LatLng(
-                                    search.pharmacy_info!.location!['coords']
+                                    search.pharmacyInfo!.location!['coords']
                                         ['lat'],
-                                    search.pharmacy_info!.location!['coords']
+                                    search.pharmacyInfo!.location!['coords']
                                         ['lng']));
                             _getPolyline(
                                 origin: LatLng(state.userLocation!.latitude,
                                     state.userLocation!.longitude),
                                 dest: LatLng(
-                                    search.pharmacy_info!.location!['coords']
+                                    search.pharmacyInfo!.location!['coords']
                                         ['lat'],
-                                    search.pharmacy_info!.location!['coords']
+                                    search.pharmacyInfo!.location!['coords']
                                         ['lng']));
                           }
 
@@ -372,7 +368,7 @@ class _HomeState extends State<Home> {
                               selectedProduct != null
                                   ? selectedProduct!.title.toString()
                                   : 'Search drug...',
-                              style: TextStyle(color: DefaultColors.ash),
+                              style: const TextStyle(color: DefaultColors.ash),
                             ),
                           ],
                         ),
@@ -384,12 +380,12 @@ class _HomeState extends State<Home> {
                   child: Positioned(
                       top: 80,
                       child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
                           width: MediaQuery.of(context).size.width,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 5),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: DefaultColors.white,
                                 boxShadow: [
                                   BoxShadow(
@@ -408,13 +404,13 @@ class _HomeState extends State<Home> {
                                         margin: EdgeInsets.zero,
                                         text: selectedProduct == null
                                             ? ""
-                                            : selectedProduct!.pharmacy_info !=
+                                            : selectedProduct!.pharmacyInfo !=
                                                     null
                                                 ? selectedProduct!
-                                                    .pharmacy_info!.title
+                                                    .pharmacyInfo!.title
                                                     .toString()
                                                 : ""),
-                                    BlackText(text: "ETA: "
+                                    const BlackText(text: "ETA: "
                                         // +
                                         //     (durationValue == null
                                         //         ? ""
@@ -426,23 +422,16 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Location: " +
-                                        (selectedProduct == null
-                                            ? ""
-                                            : selectedProduct!.pharmacy_info!
-                                                .location!['name']
-                                                .toString())),
+                                    Text(
+                                        "Location: ${selectedProduct == null ? "" : selectedProduct!.pharmacyInfo!.location!['name'].toString()}"),
                                     BlackText(
                                         size: 14,
-                                        text: 'Price: GHC ' +
-                                            (selectedProduct == null
-                                                ? ""
-                                                : selectedProduct!.price
-                                                    .toString()))
+                                        text:
+                                            'Price: GHC ${selectedProduct == null ? "" : selectedProduct!.price.toString()}')
                                   ],
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: 15),
+                                  margin: const EdgeInsets.only(top: 15),
                                   width: MediaQuery.of(context).size.width,
                                   child: SecondaryButton(
                                     onPressed: () async {
@@ -461,7 +450,7 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: 5),
+                                  margin: const EdgeInsets.only(top: 5),
                                   width: MediaQuery.of(context).size.width,
                                   child: SecondaryButton(
                                     onPressed: () async {
@@ -472,7 +461,7 @@ class _HomeState extends State<Home> {
                                     text: 'Close',
                                     color: Colors.red,
                                     backgroundColor:
-                                        Color.fromRGBO(255, 0, 0, 0.2),
+                                        const Color.fromRGBO(255, 0, 0, 0.2),
                                   ),
                                 )
                               ],
@@ -484,7 +473,7 @@ class _HomeState extends State<Home> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: DefaultColors.white,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: DefaultColors.shadowColorGrey,
                               blurRadius: 10,
@@ -492,13 +481,13 @@ class _HomeState extends State<Home> {
                         ],
                         borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
-                        onPressed: signoutIndicator
+                        onPressed: signOutIndicator
                             ? null
                             : () async {
                                 signOutDialog();
                               },
-                        child: signoutIndicator
-                            ? Container(
+                        child: signOutIndicator
+                            ? const SizedBox(
                                 width: 30,
                                 height: 30,
                                 child: CircularProgressIndicator(
@@ -507,7 +496,7 @@ class _HomeState extends State<Home> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Row(
+                            : const Row(
                                 children: [
                                   Icon(Icons.logout),
                                   BlackText(text: 'Sign out')
@@ -520,10 +509,10 @@ class _HomeState extends State<Home> {
                     bottom: 100,
                     right: 10,
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 7),
+                      padding: const EdgeInsets.symmetric(vertical: 7),
                       decoration: BoxDecoration(
                           color: DefaultColors.white,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: DefaultColors.shadowColorGrey,
                                 blurRadius: 10,
@@ -535,7 +524,7 @@ class _HomeState extends State<Home> {
                             _controller?.moveCamera(
                                 CameraUpdate.newLatLngBounds(bounds!, 40));
                           },
-                          child: Row(
+                          child: const Row(
                             children: [
                               Icon(Icons.map),
                             ],
@@ -546,10 +535,10 @@ class _HomeState extends State<Home> {
                   bottom: 30,
                   right: 10,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 7),
+                    padding: const EdgeInsets.symmetric(vertical: 7),
                     decoration: BoxDecoration(
                         color: DefaultColors.white,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: DefaultColors.shadowColorGrey,
                               blurRadius: 10,
@@ -563,7 +552,7 @@ class _HomeState extends State<Home> {
                                   state.userLocation!.longitude),
                               17));
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.gps_fixed),
                           ],
@@ -613,7 +602,7 @@ class _HomeState extends State<Home> {
   _getPolyline({required LatLng origin, required LatLng dest}) async {
     // log('message before directions');
     var url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&key=${googleAPiKey}');
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&key=$googleAPiKey');
     var response = await http.get(
       url,
     );
@@ -653,9 +642,9 @@ class _HomeState extends State<Home> {
         responseMap['routes'][0]['overview_polyline']['points']);
     List<LatLng> polylineCoordinatesInit = [];
 
-    result.forEach((PointLatLng point) {
+    for (var point in result) {
       polylineCoordinatesInit.add(LatLng(point.latitude, point.longitude));
-    });
+    }
     setState(() {
       polylineCoordinates = polylineCoordinatesInit;
     });
@@ -666,7 +655,7 @@ class _HomeState extends State<Home> {
   }
 
   _addPolyLine({required List<LatLng> polylineCoords}) {
-    PolylineId id = PolylineId("poly");
+    PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         width: 4, polylineId: id, color: Colors.red, points: polylineCoords);
     Map<PolylineId, Polyline> polylinesInit = {};
@@ -683,7 +672,7 @@ class _HomeState extends State<Home> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text('Sign Out')],
           ),
@@ -691,21 +680,21 @@ class _HomeState extends State<Home> {
             child: ListBody(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: BlackText(
+                  margin: const EdgeInsets.only(top: 5),
+                  child: const BlackText(
                     text: 'Do you want to sign out?',
                     weight: FontWeight.normal,
                     size: 14,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      child: Text('No'),
+                      child: const Text('No'),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -713,14 +702,14 @@ class _HomeState extends State<Home> {
                     PrimaryButton(
                       onPressed: () async {
                         setState(() {
-                          signoutIndicator = true;
+                          signOutIndicator = true;
                         });
                         await FirebaseAuth.instance.signOut();
                         if ((await GoogleSignIn().isSignedIn())) {
                           await GoogleSignIn().disconnect();
                         }
                         setState(() {
-                          signoutIndicator = false;
+                          signOutIndicator = false;
                         });
                         getIt
                             .get<Store<AppState>>()
@@ -729,11 +718,13 @@ class _HomeState extends State<Home> {
                         // getIt
                         //     .get<Store<AppState>>()
                         //     .dispatch(HideNavBarAction(hidebar: true));
-
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Login()),
-                            (route) => false);
+                        if (context.mounted) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Login()),
+                              (route) => false);
+                        }
                       },
                       buttonText: 'Yes',
                     )
@@ -757,7 +748,7 @@ class _HomeState extends State<Home> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text('ALERT')],
           ),
@@ -775,7 +766,7 @@ class _HomeState extends State<Home> {
           ),
           actions: <Widget>[
             TextButton(
-              child: BlackText(
+              child: const BlackText(
                 text: 'CLOSE',
               ),
               onPressed: () {

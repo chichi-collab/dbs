@@ -1,49 +1,51 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dbs/constants/auth.dart';
-import 'package:dbs/constants/firestore.dart';
-import 'package:dbs/customisedwidgets/buttons/primarybutton.dart';
-import 'package:dbs/customisedwidgets/buttons/secondarybutton.dart';
-import 'package:dbs/customisedwidgets/textinputs/custominput.dart';
-import 'package:dbs/customisedwidgets/texts/black.dart';
-import 'package:dbs/redux/actions/useractions.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/screens/home/home.dart';
-import 'package:dbs/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:redux/redux.dart';
 
+import '../../constants/auth.dart';
+import '../../constants/firestore.dart';
+import '../../customisedwidgets/buttons/primarybutton.dart';
+import '../../customisedwidgets/buttons/secondarybutton.dart';
+import '../../customisedwidgets/textinputs/custominput.dart';
+import '../../customisedwidgets/texts/black.dart';
 import '../../main.dart';
+import '../../redux/actions/useractions.dart';
+import '../../redux/appstate.dart';
+import '../../theme/colors.dart';
+import '../home/home.dart';
 
 class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+  const Signup({super.key});
 
   @override
-  _SignupState createState() => _SignupState();
+  State<Signup> createState() => _SignupState();
 }
 
-enum usertype { patient, pharmacy }
+enum UserType { patient, pharmacy }
 
 class _SignupState extends State<Signup> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController digitalController = TextEditingController();
-  List user_type = ['patient', 'pharmacy'];
+  List userTypes = ['patient', 'pharmacy'];
   String user = 'patient';
   bool done = false;
   bool buttonState = false;
   bool visible = false;
-  bool googleSignin = false;
+  bool googleSignIn = false;
 
   //errors
   TextInputError? nameError;
   TextInputError? emailError;
   TextInputError? digitalError;
   TextInputError? passwordError;
-  bool googleloading = false;
+  bool googleLoading = false;
   UserCredential? userCredential;
 
   Future<UserCredential?> signInWithGoogle() async {
@@ -73,7 +75,7 @@ class _SignupState extends State<Signup> {
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           children: [
             Visibility(
@@ -82,13 +84,13 @@ class _SignupState extends State<Signup> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 40),
+                      margin: const EdgeInsets.only(top: 40),
                       child: Image.asset('lib/assets/logo.png'),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       alignment: Alignment.center,
-                      child: BlackText(
+                      child: const BlackText(
                         text: 'for a better tomorrow',
                         size: 25,
                       ),
@@ -98,7 +100,7 @@ class _SignupState extends State<Signup> {
                           top: MediaQuery.of(context).size.height * 0.05,
                           bottom: MediaQuery.of(context).size.height * 0.05),
                       alignment: Alignment.center,
-                      child: BlackText(
+                      child: const BlackText(
                         text: 'Please enter your credentials to register',
                         size: 25,
                         weight: FontWeight.normal,
@@ -111,7 +113,7 @@ class _SignupState extends State<Signup> {
                     CustomInput(
                       controller: passwordController,
                       hint: 'Password',
-                      margin: EdgeInsets.only(top: 15),
+                      margin: const EdgeInsets.only(top: 15),
                       error: passwordError,
                       obscureText: !visible,
                       suffixIcon: IconButton(
@@ -126,7 +128,7 @@ class _SignupState extends State<Signup> {
                               : Icons.visibility_off)),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20, bottom: 10),
+                      margin: const EdgeInsets.only(top: 20, bottom: 10),
                       width: MediaQuery.of(context).size.width,
                       child: PrimaryButton(
                         buttonText: 'Signup',
@@ -147,40 +149,40 @@ class _SignupState extends State<Signup> {
                     ),
                     Row(
                       children: [
-                        Expanded(
+                        const Expanded(
                             child: Divider(
                           color: DefaultColors.black,
                         )),
                         Expanded(
                           child: Container(
                               alignment: Alignment.center,
-                              child: BlackText(
+                              child: const BlackText(
                                 text: 'OR',
                               )),
                         ),
-                        Expanded(
+                        const Expanded(
                             child: Divider(
                           color: DefaultColors.black,
                         )),
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 15, top: 10),
+                      margin: const EdgeInsets.only(bottom: 15, top: 10),
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                EdgeInsets.symmetric(
+                            padding: WidgetStateProperty.all(
+                                const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 5)),
                             backgroundColor:
-                                MaterialStateProperty.all(DefaultColors.white),
-                            shape: MaterialStateProperty.all(
+                                WidgetStateProperty.all(DefaultColors.white),
+                            shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
-                        onPressed: googleloading
+                        onPressed: googleLoading
                             ? null
                             : () async {
                                 setState(() {
-                                  googleloading = true;
+                                  googleLoading = true;
                                 });
                                 try {
                                   UserCredential? userCred =
@@ -198,7 +200,7 @@ class _SignupState extends State<Signup> {
                                                   'An account already exists for that email');
                                           setState(() {
                                             userCredential = null;
-                                            googleSignin = false;
+                                            googleSignIn = false;
                                             done = false;
                                             buttonState = false;
                                           });
@@ -208,9 +210,9 @@ class _SignupState extends State<Signup> {
                                           }
                                         } else {
                                           setState(() {
-                                            googleSignin = true;
+                                            googleSignIn = true;
                                             userCredential = userCred;
-                                            googleloading = false;
+                                            googleLoading = false;
                                             done = true;
                                             emailController.text =
                                                 userCredential!.user!.email!;
@@ -225,16 +227,16 @@ class _SignupState extends State<Signup> {
                                     }
                                   } else {}
                                 } catch (error) {
-                                  print(error);
+                                  log("error: $error");
                                   alert(message: error.toString());
                                 }
 
                                 setState(() {
-                                  googleloading = false;
+                                  googleLoading = false;
                                 });
                               },
-                        child: googleloading
-                            ? Container(
+                        child: googleLoading
+                            ? const SizedBox(
                                 width: 30,
                                 height: 30,
                                 child: CircularProgressIndicator(
@@ -249,13 +251,13 @@ class _SignupState extends State<Signup> {
                                 children: [
                                   // Icon(Icons.goog)
                                   Container(
-                                    margin: EdgeInsets.only(left: 25),
+                                    margin: const EdgeInsets.only(left: 25),
                                     width: 25,
                                     height: 25,
                                     child: Image.asset(
                                         'lib/assets/google_logo.png'),
                                   ),
-                                  BlackText(
+                                  const BlackText(
                                     text: 'Sign up with Google',
                                     size: 22,
                                     weight: FontWeight.normal,
@@ -267,7 +269,7 @@ class _SignupState extends State<Signup> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        BlackText(
+                        const BlackText(
                           text: "Already have an account?",
                         ),
                         SecondaryButton(
@@ -292,14 +294,14 @@ class _SignupState extends State<Signup> {
                           }
                           setState(() {
                             done = false;
-                            googleSignin = false;
+                            googleSignIn = false;
                           });
                         },
-                        icon: Icon(Icons.arrow_back)),
+                        icon: const Icon(Icons.arrow_back)),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(top: 50, bottom: 40),
-                      child: BlackText(
+                      margin: const EdgeInsets.only(top: 50, bottom: 40),
+                      child: const BlackText(
                         text: 'Few settings to go...',
                         size: 25,
                       ),
@@ -307,13 +309,13 @@ class _SignupState extends State<Signup> {
                     CustomInput(
                       controller: nameController,
                       hint: 'Name',
-                      margin: EdgeInsets.only(top: 15),
+                      margin: const EdgeInsets.only(top: 15),
                       error: nameError,
                     ),
                     CustomInput(
                       controller: digitalController,
                       hint: 'Digital Address',
-                      margin: EdgeInsets.only(top: 15),
+                      margin: const EdgeInsets.only(top: 15),
                       error: digitalError,
                     ),
                     // Container(
@@ -363,11 +365,11 @@ class _SignupState extends State<Signup> {
                         buttonText: 'Create',
                         onPressed: !buttonState
                             ? () {
-                                if (googleSignin) {
+                                if (googleSignIn) {
                                   setState(() {
                                     buttonState = true;
                                   });
-                                  postUserdata(id: userCredential!.user!.uid);
+                                  postUserData(id: userCredential!.user!.uid);
                                 } else {
                                   if (nameController.text.trim().length > 2 &&
                                       emailController.text.trim().length > 6 &&
@@ -390,7 +392,7 @@ class _SignupState extends State<Signup> {
                       direction: Axis.horizontal,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        BlackText(
+                        const BlackText(
                           text: "By creating this account, you agree to our",
                         ),
                         SecondaryButton(
@@ -398,7 +400,7 @@ class _SignupState extends State<Signup> {
                           text: 'Sign in',
                           padding: EdgeInsets.zero,
                         ),
-                        BlackText(text: 'and'),
+                        const BlackText(text: 'and'),
                         SecondaryButton(
                           onPressed: () {},
                           text: 'Privacy Policy',
@@ -420,7 +422,7 @@ class _SignupState extends State<Signup> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text('Alert')],
           ),
@@ -434,8 +436,8 @@ class _SignupState extends State<Signup> {
                 ),
                 BlackText(text: message),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: BlackText(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: const BlackText(
                     text: 'Press OK to make changes and try again',
                     weight: FontWeight.normal,
                     size: 14,
@@ -446,7 +448,7 @@ class _SignupState extends State<Signup> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -470,14 +472,14 @@ class _SignupState extends State<Signup> {
           nameController.text.trim(),
         );
         // userCredential.user!.updatePhoneNumber(phoneCredential)
-        postUserdata(id: userCredential.user!.uid);
+        postUserData(id: userCredential.user!.uid);
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
         buttonState = false;
       });
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        log('The password provided is too weak.');
         _showMyDialogError(message: 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         // print('The account already exists for that email.');
@@ -495,7 +497,7 @@ class _SignupState extends State<Signup> {
     }
   }
 
-  void postUserdata({required String id}) {
+  void postUserData({required String id}) {
     DocumentReference userRef = db.collection('users').doc(id);
 
     userRef.set({
@@ -515,7 +517,7 @@ class _SignupState extends State<Signup> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => const Home(),
           ),
           (route) => false);
     }).catchError((error) {
@@ -532,7 +534,7 @@ class _SignupState extends State<Signup> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text('Alert')],
           ),
@@ -546,8 +548,8 @@ class _SignupState extends State<Signup> {
                 ),
                 BlackText(text: message),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: BlackText(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: const BlackText(
                     text: 'Press OK to make changes and try again',
                     weight: FontWeight.normal,
                     size: 14,
@@ -558,7 +560,7 @@ class _SignupState extends State<Signup> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -1,5 +1,6 @@
-import 'package:dbs/theme/colors.dart';
 import 'package:flutter/material.dart';
+
+import '../../theme/colors.dart';
 
 class BlackText extends StatelessWidget {
   final String text;
@@ -8,23 +9,22 @@ class BlackText extends StatelessWidget {
   final EdgeInsets margin;
 
   const BlackText(
-      {Key? key,
+      {super.key,
       required this.text,
       this.weight = FontWeight.bold,
       this.size = 16,
-      this.margin = const EdgeInsets.all(5)})
-      : super(key: key);
+      this.margin = const EdgeInsets.all(5)});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: this.margin,
+      margin: margin,
       child: Text(
-        this.text,
+        text,
         style: TextStyle(
-          fontSize: this.size,
+          fontSize: size,
           color: DefaultColors.black,
-          fontWeight: this.weight,
+          fontWeight: weight,
         ),
         // textAlign: TextAlign.left,
       ),

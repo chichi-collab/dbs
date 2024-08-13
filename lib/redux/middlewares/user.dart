@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dbs/constants/firestore.dart';
-import 'package:dbs/data/products.dart';
-import 'package:dbs/data/user.dart';
-import 'package:dbs/redux/actions/useractions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:redux/redux.dart';
 
+import '../../constants/firestore.dart';
+import '../../data/products.dart';
+import '../../data/user.dart';
+import '../actions/useractions.dart';
 import '../appstate.dart';
 
 Future<void> saveTokenToDatabase(String token, {String? userId}) async {
@@ -40,10 +40,10 @@ void fetchUser(Store<AppState> store, action, NextDispatcher next) {
       List<Product> initProduct = [];
       log(element.size.toString(), name: 'products size');
       if (element.size > 0) {
-        element.docs.forEach((element) {
+        for (var element in element.docs) {
           Product prod = Product.fromJson(element.data());
           initProduct.add(prod);
-        });
+        }
       }
       store.dispatch(GetProductActionSuccess(products: initProduct));
     });

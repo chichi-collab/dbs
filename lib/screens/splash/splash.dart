@@ -1,26 +1,25 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dbs/constants/firestore.dart';
-import 'package:dbs/customisedwidgets/textinputs/custominput.dart';
-import 'package:dbs/customisedwidgets/texts/black.dart';
-import 'package:dbs/data/user.dart';
-import 'package:dbs/redux/actions/useractions.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/screens/home/home.dart';
-import 'package:dbs/screens/login/login.dart';
-import 'package:dbs/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import '../../constants/firestore.dart';
+import '../../customisedwidgets/texts/black.dart';
+import '../../data/user.dart';
 import '../../main.dart';
+import '../../redux/actions/useractions.dart';
+import '../../redux/appstate.dart';
+import '../home/home.dart';
+import '../login/login.dart';
 
 class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+  const Splash({super.key});
 
   @override
-  _SplashState createState() => _SplashState();
+  State<Splash> createState() => _SplashState();
 }
 
 class _SplashState extends State<Splash> {
@@ -33,11 +32,11 @@ class _SplashState extends State<Splash> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: Image.asset('lib/assets/logo_2.png'),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 50),
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
               child:
@@ -45,13 +44,13 @@ class _SplashState extends State<Splash> {
                   //   constraints: BoxConstraints(
                   //       maxWidth: MediaQuery.of(context).size.width * 1),
                   //   child:
-                  BlackText(
+                  const BlackText(
                 text: 'Drug Distribution System',
                 size: 55,
               ),
               // )
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
                 'lib/assets/splash_shape.png',
@@ -64,23 +63,24 @@ class _SplashState extends State<Splash> {
       ),
     ));
   }
+
   @override
   void initState() {
     super.initState();
     // getIt.get<Store<AppState>>().dispatch(GetUserLocation());
 
-    Timer(Duration(milliseconds: 3000), () {
+    Timer(const Duration(milliseconds: 3000), () {
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         if (user == null) {
-          print('User is currently signed out!');
+          log('User is currently signed out!');
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Login(),
+              builder: (context) => const Login(),
             ),
           );
         } else {
-          print('User is signed in!');
+          log('User is signed in!');
           db
               .collection('users')
               .doc(user.uid)
@@ -89,24 +89,26 @@ class _SplashState extends State<Splash> {
             // log('successful');
             if (snapshot.exists) {
               UserModel userModel = UserModel.fromJson(snapshot.data()!);
-              if (userModel.is_active) {
+              if (userModel.isActive) {
                 getIt
                     .get<Store<AppState>>()
                     .dispatch(GetUserAction(uid: userModel.id));
                 // getIt
                 //     .get<Store<AppState>>()
                 //     .dispatch(HideNavBarAction(hidebar: false));
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Home(),
-                  ),
-                );
+                if (context.mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Home(),
+                    ),
+                  );
+                }
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Login(),
+                    builder: (context) => const Login(),
                   ),
                 );
               }
@@ -114,7 +116,7 @@ class _SplashState extends State<Splash> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Login(),
+                  builder: (context) => const Login(),
                 ),
               );
             }

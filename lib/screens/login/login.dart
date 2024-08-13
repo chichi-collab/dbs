@@ -2,31 +2,31 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dbs/constants/firestore.dart';
-import 'package:dbs/customisedwidgets/buttons/primarybutton.dart';
-import 'package:dbs/customisedwidgets/buttons/secondarybutton.dart';
-import 'package:dbs/customisedwidgets/textinputs/custominput.dart';
-import 'package:dbs/customisedwidgets/texts/black.dart';
-import 'package:dbs/data/user.dart';
-import 'package:dbs/redux/actions/useractions.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/screens/forgotpassword/forgotpassword.dart';
-import 'package:dbs/screens/home/home.dart';
-import 'package:dbs/screens/signup/signup.dart';
-import 'package:dbs/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:redux/redux.dart';
 
+import '../../constants/firestore.dart';
+import '../../customisedwidgets/buttons/primarybutton.dart';
+import '../../customisedwidgets/buttons/secondarybutton.dart';
+import '../../customisedwidgets/textinputs/custominput.dart';
+import '../../customisedwidgets/texts/black.dart';
+import '../../data/user.dart';
 import '../../main.dart';
+import '../../redux/actions/useractions.dart';
+import '../../redux/appstate.dart';
+import '../../theme/colors.dart';
+import '../forgotpassword/forgotpassword.dart';
+import '../home/home.dart';
+import '../signup/signup.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   bool visible = false;
   bool loading = false;
-  bool googleloading = false;
+  bool googleLoading = false;
   TextInputError? emailError;
 
   TextInputError? passwordError;
@@ -45,18 +45,18 @@ class _LoginState extends State<Login> {
       child: Scaffold(
           body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: Image.asset('lib/assets/logo.png'),
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
-                child: BlackText(
+                child: const BlackText(
                   text: 'for a better tomorrow',
                   size: 25,
                 ),
@@ -66,7 +66,7 @@ class _LoginState extends State<Login> {
                     top: MediaQuery.of(context).size.height * 0.05,
                     bottom: MediaQuery.of(context).size.height * 0.05),
                 alignment: Alignment.center,
-                child: BlackText(
+                child: const BlackText(
                   text: 'Please login to continue',
                   size: 25,
                   weight: FontWeight.normal,
@@ -81,7 +81,7 @@ class _LoginState extends State<Login> {
                 controller: passwordController,
                 error: passwordError,
                 hint: 'Password',
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
                 obscureText: !visible,
                 suffixIcon: IconButton(
                     color: DefaultColors.black,
@@ -94,7 +94,7 @@ class _LoginState extends State<Login> {
                         visible ? Icons.visibility : Icons.visibility_off)),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20, bottom: 10),
+                margin: const EdgeInsets.only(top: 20, bottom: 10),
                 width: MediaQuery.of(context).size.width,
                 child: PrimaryButton(
                   buttonText: 'Login',
@@ -122,7 +122,7 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  BlackText(
+                  const BlackText(
                     text: 'Forgot password?',
                   ),
                   SecondaryButton(
@@ -130,12 +130,12 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       showModalBottomSheet(
                         isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(50),
                                 topRight: Radius.circular(50))),
                         context: context,
-                        builder: (context) => ForgotPassword(),
+                        builder: (context) => const ForgotPassword(),
                       );
                     },
                   )
@@ -143,38 +143,39 @@ class _LoginState extends State<Login> {
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                       child: Divider(
                     color: DefaultColors.black,
                   )),
                   Expanded(
                     child: Container(
                         alignment: Alignment.center,
-                        child: BlackText(
+                        child: const BlackText(
                           text: 'OR',
                         )),
                   ),
-                  Expanded(
+                  const Expanded(
                       child: Divider(
                     color: DefaultColors.black,
                   )),
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 15, top: 10),
+                margin: const EdgeInsets.only(bottom: 15, top: 10),
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
+                      padding: WidgetStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 5)),
                       backgroundColor:
-                          MaterialStateProperty.all(DefaultColors.white),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          WidgetStateProperty.all(DefaultColors.white),
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)))),
-                  onPressed: googleloading
+                  onPressed: googleLoading
                       ? null
                       : () async {
                           setState(() {
-                            googleloading = true;
+                            googleLoading = true;
                           });
                           try {
                             UserCredential? userCred = await signInWithGoogle();
@@ -187,16 +188,16 @@ class _LoginState extends State<Login> {
                               }
                             } else {}
                           } catch (error) {
-                            print(error);
+                            log("error: $error");
                             alert(message: error.toString());
                           }
 
                           setState(() {
-                            googleloading = false;
+                            googleLoading = false;
                           });
                         },
-                  child: googleloading
-                      ? Container(
+                  child: googleLoading
+                      ? const SizedBox(
                           width: 30,
                           height: 30,
                           child: CircularProgressIndicator(
@@ -210,12 +211,12 @@ class _LoginState extends State<Login> {
                           children: [
                             // Icon(Icons.goog)
                             Container(
-                              margin: EdgeInsets.only(left: 25),
+                              margin: const EdgeInsets.only(left: 25),
                               width: 25,
                               height: 25,
                               child: Image.asset('lib/assets/google_logo.png'),
                             ),
-                            BlackText(
+                            const BlackText(
                               text: 'Login with Google',
                               size: 22,
                               weight: FontWeight.normal,
@@ -227,7 +228,7 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  BlackText(
+                  const BlackText(
                     text: "Don't have an account?",
                   ),
                   SecondaryButton(
@@ -236,7 +237,7 @@ class _LoginState extends State<Login> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Signup(),
+                            builder: (context) => const Signup(),
                           ));
                     },
                   )
@@ -252,7 +253,7 @@ class _LoginState extends State<Login> {
             barrierDismissible: false, // user must tap button!
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Row(
+                title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [Text('Close Application')],
                 ),
@@ -262,11 +263,11 @@ class _LoginState extends State<Login> {
                     ConstrainedBox(
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.7),
-                      child: BlackText(
+                      child: const BlackText(
                         text: "You are about to close this App. Proceed?",
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
@@ -363,17 +364,19 @@ class _LoginState extends State<Login> {
         // registerToTipsTopic();
 
         UserModel userModel = UserModel.fromJson(snapshot.data()!);
-        if (userModel.is_active) {
+        if (userModel.isActive) {
           getIt
               .get<Store<AppState>>()
               .dispatch(GetUserAction(uid: userModel.id));
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ),
-          );
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Home(),
+              ),
+            );
+          }
         } else {
           if ((await GoogleSignIn().isSignedIn())) {
             await GoogleSignIn().disconnect();
@@ -400,7 +403,7 @@ class _LoginState extends State<Login> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Text('Alert')],
           ),
@@ -414,8 +417,8 @@ class _LoginState extends State<Login> {
                 ),
                 BlackText(text: message),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: BlackText(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: const BlackText(
                     text: 'Press OK to make changes and try again',
                     weight: FontWeight.normal,
                     size: 14,
@@ -426,7 +429,7 @@ class _LoginState extends State<Login> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

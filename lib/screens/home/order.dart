@@ -1,23 +1,23 @@
 import 'dart:async';
 
-import 'package:dbs/constants/firestore.dart';
-import 'package:dbs/customisedwidgets/buttons/primarybutton.dart';
-import 'package:dbs/customisedwidgets/buttons/secondarybutton.dart';
-import 'package:dbs/customisedwidgets/texts/black.dart';
-import 'package:dbs/data/pharmacy.dart';
-import 'package:dbs/data/products.dart';
-import 'package:dbs/redux/appstate.dart';
-import 'package:dbs/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../constants/firestore.dart';
+import '../../customisedwidgets/buttons/primarybutton.dart';
+import '../../customisedwidgets/buttons/secondarybutton.dart';
+import '../../customisedwidgets/texts/black.dart';
+import '../../data/products.dart';
+import '../../redux/appstate.dart';
+import '../../theme/colors.dart';
+
 class Order extends StatefulWidget {
-  const Order({Key? key, required this.product}) : super(key: key);
+  const Order({super.key, required this.product});
   final Product product;
 
   @override
-  _OrderState createState() => _OrderState();
+  State<Order> createState() => _OrderState();
 }
 
 class _OrderState extends State<Order> {
@@ -31,10 +31,10 @@ class _OrderState extends State<Order> {
           appBar: AppBar(
             backgroundColor: DefaultColors.green,
             elevation: 0,
-            title: Text(widget.product.pharmacy_info!.title.toString()),
+            title: Text(widget.product.pharmacyInfo!.title.toString()),
             leading: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
             ),
           ),
           body: Column(
@@ -52,12 +52,12 @@ class _OrderState extends State<Order> {
                   Positioned(
                       bottom: -25,
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   offset: Offset(0, 5),
                                   color: DefaultColors.shadowColorGrey,
@@ -73,15 +73,16 @@ class _OrderState extends State<Order> {
               Expanded(
                 flex: 8,
                 child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 70,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BlackText(text: 'Quantity'),
+                          const BlackText(text: 'Quantity'),
                           Row(
                             children: [
                               SecondaryButton(
@@ -97,7 +98,8 @@ class _OrderState extends State<Order> {
                                 color: Colors.black,
                               ),
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: BlackText(text: quantity.toString()),
                               ),
                               SecondaryButton(
@@ -114,62 +116,61 @@ class _OrderState extends State<Order> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BlackText(text: 'Price'),
+                          const BlackText(text: 'Price'),
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       offset: Offset(0, 5),
                                       color: DefaultColors.shadowColorGrey,
                                       blurRadius: 10)
                                 ]),
                             child: BlackText(
-                              text: 'GHC ' + widget.product.price.toString(),
+                              text: 'GHC ${widget.product.price}',
                               size: 20,
                             ),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BlackText(text: 'Total'),
+                          const BlackText(text: 'Total'),
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       offset: Offset(0, 5),
                                       color: DefaultColors.shadowColorGrey,
                                       blurRadius: 10)
                                 ]),
                             child: BlackText(
-                              text: 'GHC ' +
-                                  (widget.product.price! * quantity)
-                                      .toStringAsFixed(2),
+                              text:
+                                  'GHC ${(widget.product.price! * quantity).toStringAsFixed(2)}',
                               size: 20,
                             ),
                           )
                         ],
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 50),
+                        margin: const EdgeInsets.only(top: 50),
                         child: PrimaryButton(
                           elevation: 0,
                           buttonText: 'Order',
@@ -197,7 +198,7 @@ class _OrderState extends State<Order> {
                                           "id": widget.product.id,
                                           "price": widget.product.price,
                                           "pharmacy_info": widget
-                                              .product.pharmacy_info!
+                                              .product.pharmacyInfo!
                                               .toJson(),
                                           "title": widget.product.title,
                                           "pharmacy": widget.product.pharmacy,
@@ -206,40 +207,43 @@ class _OrderState extends State<Order> {
                                         setState(() {
                                           order = false;
                                         });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Product ordered successfully',
-                                              style: TextStyle(
-                                                  color: Colors.white),
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Product ordered successfully',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              backgroundColor: Colors.green,
                                             ),
-                                            backgroundColor: Colors.green,
-                                          ),
-                                        );
-                                        Timer(Duration(seconds: 4), () {
+                                          );
+                                        }
+                                        Timer(const Duration(seconds: 4), () {
                                           Navigator.pop(context);
                                         });
                                       }).catchError((error) {
                                         setState(() {
                                           order = false;
                                         });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                            'An error occured, Try again..',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          backgroundColor: Colors.red,
-                                        ));
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                              'An error occurred, Try again..',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ));
+                                        }
                                       });
                                     },
                         ),
                       )
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 15),
                 ),
               )
             ],
